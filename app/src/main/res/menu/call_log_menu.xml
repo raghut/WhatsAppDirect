@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/call_history_item"
+        android:contentDescription="@string/call_history"
+        android:icon="@drawable/vc_history"
+        android:title="@string/call_history"
+        app:showAsAction="always" />
+</menu>

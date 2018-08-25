@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">WhatsAppDirect</string>
+    <string name="phone_number">Phone number</string>
+    <string name="call_history">Call History</string>
+</resources>
