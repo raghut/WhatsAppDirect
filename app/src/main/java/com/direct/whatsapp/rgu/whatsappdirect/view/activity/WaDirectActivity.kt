@@ -1,4 +1,4 @@
-package com.direct.whatsapp.rgu.whatsappdirect
+package com.direct.whatsapp.rgu.whatsappdirect.view.activity
 
 import android.content.ClipDescription.MIMETYPE_TEXT_PLAIN
 import android.content.ClipboardManager
@@ -13,6 +13,8 @@ import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import com.direct.whatsapp.rgu.whatsappdirect.R
+import com.direct.whatsapp.rgu.whatsappdirect.Utils
 import com.direct.whatsapp.rgu.whatsappdirect.Utils.WHATS_APP_URL
 import java.net.URLEncoder
 

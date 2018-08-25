@@ -1,4 +1,4 @@
-package com.direct.whatsapp.rgu.whatsappdirect
+package com.direct.whatsapp.rgu.whatsappdirect.view.activity
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -10,6 +10,8 @@ import kotlinx.android.synthetic.main.activity_call_log.*
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import android.support.v7.widget.DividerItemDecoration
+import com.direct.whatsapp.rgu.whatsappdirect.R
+import com.direct.whatsapp.rgu.whatsappdirect.Utils
 
 
 class CallLogActivity : AppCompatActivity() {

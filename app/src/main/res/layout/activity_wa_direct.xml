@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/ic_whats_app_bg"
     android:padding="16dp"
-    tools:context="com.direct.whatsapp.rgu.whatsappdirect.WaDirectActivity">
+    tools:context="com.direct.whatsapp.rgu.whatsappdirect.view.activity.WaDirectActivity">
 
     <android.support.v7.widget.CardView
         android:id="@+id/phone_no_view"
