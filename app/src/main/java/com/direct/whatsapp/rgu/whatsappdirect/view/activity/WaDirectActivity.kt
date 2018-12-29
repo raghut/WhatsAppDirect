@@ -29,6 +29,7 @@ class WaDirectActivity : AppCompatActivity() {
 
     private lateinit var countryCodePickerView: CountryCodePicker
     private lateinit var phoneNumTil: TextInputLayout
+    private var shouldShowClipboard = true;
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +46,10 @@ class WaDirectActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        handleClipboardPopUp()
+
+        if (shouldShowClipboard) {
+            handleClipboardPopUp()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -85,16 +89,25 @@ class WaDirectActivity : AppCompatActivity() {
     private fun handleClipboardPopUp() {
         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         if (clipboard.hasPrimaryClip() && clipboard.getPrimaryClipDescription().hasMimeType(MIMETYPE_TEXT_PLAIN)) {
-            val clipText = clipboard.getPrimaryClip().getItemAt(0).text
+            val clipText = clipboard.primaryClip.getItemAt(0).text
             if (!TextUtils.isEmpty(clipText) && Utils.isValidPhone(clipText.toString())) {
                 val builder = AlertDialog.Builder(this)
-                builder.setMessage("Do you want to send it to " + clipText)
-                        .setPositiveButton("ok", { dialog, which -> handleClipText(clipText) })
-                        .setNegativeButton("cancel", { dialog, which -> dialog.dismiss() })
+                builder.setMessage(getString(R.string.clipboard_popup_message) + clipText)
+                        .setPositiveButton(getString(R.string.ok)) { dialog, which ->
+                            handleClipText(clipText)
+                        }
+                        .setNegativeButton(getString(R.string.cancel)) { dialog, which ->
+                            handleClipboardPopUpDismiss()
+                        }
+                        .setOnDismissListener { handleClipboardPopUpDismiss() }
 
                 builder.create().show()
             }
         }
+    }
+
+    private fun handleClipboardPopUpDismiss() {
+        shouldShowClipboard = false
     }
 
     private fun handleClipText(clipText: CharSequence) {
