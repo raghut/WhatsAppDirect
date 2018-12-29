@@ -108,11 +108,10 @@ class WaDirectActivity : AppCompatActivity() {
 
             Log.d("raghu", "phoneNo= " + extractedPhoneNo.nationalNumber + " country code= " + extractedPhoneNo.countryCode)
 
+            countryCodePickerView.setCountryForPhoneCode(extractedPhoneNo.countryCode)
+            phoneNumTil.editText!!.setText(extractedPhoneNo.nationalNumber.toString())
+
             sendMessage(phNumber, "");
-
-//            countryCodePickerView.setCountryForPhoneCode(extractedPhoneNo.countryCode)
-//            phoneNumTil.editText!!.setText(extractedPhoneNo.nationalNumber.toString())
-
         } catch (e: NumberParseException) {
             Log.e("raghu", " NumberParseException was thrown : " + e.toString());
         }
