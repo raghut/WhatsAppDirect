@@ -63,7 +63,7 @@
         app:layout_constraintTop_toBottomOf="@+id/phone_no_view">
 
         <EditText
-            android:id="@+id/messageTv"
+            android:id="@+id/messageEt"
             android:layout_width="match_parent"
             android:layout_height="104dp"
             android:background="@color/white"

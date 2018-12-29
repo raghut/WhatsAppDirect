@@ -1,8 +1,11 @@
 <resources>
-    <string name="app_name">WhatsAppDirect</string>
+    <string name="app_name">WhatsDirect</string>
+    <string name="activity_label">Whats App Direct</string>
     <string name="phone_number">Phone number</string>
     <string name="call_history">Call History</string>
     <string name="clipboard_popup_message">Do you want to send it to</string>
     <string name="ok">ok</string>
     <string name="cancel">cancel</string>
+    <string name="call_log">Call Logs</string>
+    <string name="phone_no_empty_error">Please enter phone number</string>
 </resources>

@@ -24,7 +24,7 @@ class CallLogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_call_log)
 
-        title = "Call Logs"
+        title = getString(R.string.call_log)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 

@@ -15,6 +15,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.EditText
 import com.direct.whatsapp.rgu.whatsappdirect.R
 import com.direct.whatsapp.rgu.whatsappdirect.Utils
 import com.direct.whatsapp.rgu.whatsappdirect.Utils.KEY_PHONE_NUMBER
@@ -30,6 +31,7 @@ class WaDirectActivity : AppCompatActivity() {
 
     private lateinit var countryCodePickerView: CountryCodePicker
     private lateinit var phoneNumTil: TextInputLayout
+    private lateinit var messageEt: EditText
     private var shouldShowClipboard = true;
 
 
@@ -38,10 +40,10 @@ class WaDirectActivity : AppCompatActivity() {
         setContentView(R.layout.activity_wa_direct)
         countryCodePickerView = findViewById(R.id.country_code_picker_view)
         phoneNumTil = findViewById(R.id.phone_no_til)
+        messageEt = findViewById(R.id.messageEt)
 
         findViewById<Button>(R.id.submit_btn).setOnClickListener {
-            val phoneNum = findViewById<TextInputLayout>(R.id.phone_no_til).editText?.text.toString()
-            sendMessage(countryCodePickerView.selectedCountryCode + phoneNum)
+            handleSendButton();
         }
     }
 
@@ -60,7 +62,6 @@ class WaDirectActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-
         when (item?.itemId) {
             R.id.call_history_item -> {
                 val intent = Intent(this, CallLogActivity::class.java)
@@ -68,6 +69,14 @@ class WaDirectActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun handleSendButton() {
+        if (!TextUtils.isEmpty(phoneNumTil.editText!!.text)) {
+            sendMessage(countryCodePickerView.selectedCountryCode + phoneNumTil.editText!!.text,  messageEt.text.toString())
+        } else {
+            phoneNumTil.setError(getString(R.string.phone_no_empty_error))
+        }
     }
 
     private fun sendMessage(phoneNo: String, message: String = "") {
@@ -112,7 +121,7 @@ class WaDirectActivity : AppCompatActivity() {
     }
 
     private fun handleClipText(clipText: CharSequence) {
-        sendMessage(clipText.toString())
+        handleSelectedCallLogItem(clipText.toString())
     }
 
     private fun handleSelectedCallLogItem(phNumber: String) {
@@ -130,6 +139,7 @@ class WaDirectActivity : AppCompatActivity() {
             Log.e(TAG, " NumberParseException was thrown : " + e.toString());
         }
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

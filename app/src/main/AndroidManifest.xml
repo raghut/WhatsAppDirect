@@ -12,14 +12,19 @@
         android:roundIcon="@drawable/vc_wd_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.activity.WaDirectActivity">
+
+        <activity
+            android:name=".view.activity.WaDirectActivity"
+            android:label="@string/activity_label">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.CallLogActivity"></activity>
+
+        <activity android:name=".view.activity.CallLogActivity" />
     </application>
 
 </manifest>
