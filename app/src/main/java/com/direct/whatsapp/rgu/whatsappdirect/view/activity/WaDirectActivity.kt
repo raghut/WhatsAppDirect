@@ -25,6 +25,7 @@ import java.net.URLEncoder
 
 class WaDirectActivity : AppCompatActivity() {
 
+    private val TAG = "WaDirectActivity"
     val CALL_LOG_REQUEST = 100
 
     private lateinit var countryCodePickerView: CountryCodePicker
@@ -119,14 +120,14 @@ class WaDirectActivity : AppCompatActivity() {
         try {
             val extractedPhoneNo = Utils.getExtractedPhoneNo(phNumber, this)
 
-            Log.d("raghu", "phoneNo= " + extractedPhoneNo.nationalNumber + " country code= " + extractedPhoneNo.countryCode)
+            Log.d(TAG, "phoneNo= " + extractedPhoneNo.nationalNumber + " country code= " + extractedPhoneNo.countryCode)
 
             countryCodePickerView.setCountryForPhoneCode(extractedPhoneNo.countryCode)
             phoneNumTil.editText!!.setText(extractedPhoneNo.nationalNumber.toString())
 
             sendMessage(phNumber, "");
         } catch (e: NumberParseException) {
-            Log.e("raghu", " NumberParseException was thrown : " + e.toString());
+            Log.e(TAG, " NumberParseException was thrown : " + e.toString());
         }
     }
 
