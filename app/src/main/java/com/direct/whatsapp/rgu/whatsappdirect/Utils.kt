@@ -1,18 +1,24 @@
 package com.direct.whatsapp.rgu.whatsappdirect
 
 import android.content.Context
-import java.util.regex.Pattern
 import android.provider.CallLog
 import android.text.TextUtils
 import android.util.Log
 import com.direct.whatsapp.rgu.whatsappdirect.data.CallLogData
+import io.michaelrocks.libphonenumber.android.PhoneNumberUtil
+import io.michaelrocks.libphonenumber.android.Phonenumber
 import rx.Observable
 import java.lang.Long
+import java.text.SimpleDateFormat
 import java.util.*
+import java.util.regex.Pattern
 import kotlin.collections.ArrayList
 
 
 object Utils {
+
+    //Constants
+    val KEY_PHONE_NUMBER = "key_phone_number"
 
     val WHATS_APP_URL = "https://api.whatsapp.com/send?phone="
 
@@ -28,8 +34,9 @@ object Utils {
         val callsData = ArrayList<CallLogData>()
 
         val sb = StringBuffer()
-        val contactsCursor = context.contentResolver.query(CallLog.Calls.CONTENT_URI, null, null, null, null)
+        val contactsCursor = context.contentResolver.query(CallLog.Calls.CONTENT_URI, null, null, null, CallLog.Calls.DATE + " DESC")
         val number = contactsCursor.getColumnIndex(CallLog.Calls.NUMBER)
+        val name = contactsCursor.getColumnIndex(CallLog.Calls.CACHED_NAME)
         val type = contactsCursor.getColumnIndex(CallLog.Calls.TYPE)
         val date = contactsCursor.getColumnIndex(CallLog.Calls.DATE)
         val duration = contactsCursor.getColumnIndex(CallLog.Calls.DURATION)
@@ -42,6 +49,7 @@ object Utils {
             callData.date = contactsCursor.getString(date)
             callData.dayTime = Date(Long.valueOf(callData.date))
             callData.duration = contactsCursor.getString(duration)
+            callData.name = contactsCursor.getString(name)
 
             var dir: String? = null
             val dircode = Integer.parseInt(callData.callType)
@@ -52,7 +60,7 @@ object Utils {
 
                 CallLog.Calls.MISSED_TYPE -> dir = "MISSED"
             }
-            Log.d("raghu", "\nPhone Number:--- " + callData.phoneNumber + " \nCall Type:--- "
+            Log.d("call log", "\nPhone Number:--- " + callData.phoneNumber + " \nCall Type:--- "
                     + dir + " \nCall Date:--- " + callData.dayTime
                     + " \nCall duration in sec :--- " + callData.duration)
             sb.append("\n----------------------------------")
@@ -65,5 +73,17 @@ object Utils {
 
         return Observable.just(callsData)
 
+    }
+
+    fun getExtractedPhoneNo(phoneNo: String, context: Context): Phonenumber.PhoneNumber {
+        val phoneNoUtil = PhoneNumberUtil.createInstance(context)
+        return phoneNoUtil.parse(phoneNo, "")
+    }
+
+
+    fun getTime(dateInMillis: kotlin.Long): String {
+
+        val formatter = SimpleDateFormat("dd/MM/yyyy HH:MM")
+        return formatter.format(Date(dateInMillis))
     }
 }

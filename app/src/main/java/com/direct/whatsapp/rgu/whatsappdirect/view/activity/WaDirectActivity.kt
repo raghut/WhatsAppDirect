@@ -1,5 +1,6 @@
 package com.direct.whatsapp.rgu.whatsappdirect.view.activity
 
+import android.app.Activity
 import android.content.ClipDescription.MIMETYPE_TEXT_PLAIN
 import android.content.ClipboardManager
 import android.content.Context
@@ -10,24 +11,35 @@ import android.support.design.widget.TextInputLayout
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import com.direct.whatsapp.rgu.whatsappdirect.R
 import com.direct.whatsapp.rgu.whatsappdirect.Utils
+import com.direct.whatsapp.rgu.whatsappdirect.Utils.KEY_PHONE_NUMBER
 import com.direct.whatsapp.rgu.whatsappdirect.Utils.WHATS_APP_URL
+import com.hbb20.CountryCodePicker
+import io.michaelrocks.libphonenumber.android.NumberParseException
 import java.net.URLEncoder
 
 class WaDirectActivity : AppCompatActivity() {
+
+    val CALL_LOG_REQUEST = 100
+
+    private lateinit var countryCodePickerView: CountryCodePicker
+    private lateinit var phoneNumTil: TextInputLayout
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wa_direct)
+        countryCodePickerView = findViewById(R.id.country_code_picker_view)
+        phoneNumTil = findViewById(R.id.phone_no_til)
 
         findViewById<Button>(R.id.submit_btn).setOnClickListener {
             val phoneNum = findViewById<TextInputLayout>(R.id.phone_no_til).editText?.text.toString()
-            sendMessage("91" + phoneNum)
+            sendMessage(countryCodePickerView.selectedCountryCode + phoneNum)
         }
     }
 
@@ -47,7 +59,7 @@ class WaDirectActivity : AppCompatActivity() {
         when (item?.itemId) {
             R.id.call_history_item -> {
                 val intent = Intent(this, CallLogActivity::class.java)
-                startActivity(intent)
+                startActivityForResult(intent, CALL_LOG_REQUEST)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -89,4 +101,28 @@ class WaDirectActivity : AppCompatActivity() {
         sendMessage(clipText.toString())
     }
 
+    private fun handleSelectedCallLogItem(phNumber: String) {
+
+        try {
+            val extractedPhoneNo = Utils.getExtractedPhoneNo(phNumber, this)
+
+            Log.d("raghu", "phoneNo= " + extractedPhoneNo.nationalNumber + " country code= " + extractedPhoneNo.countryCode)
+
+            sendMessage(phNumber, "");
+
+//            countryCodePickerView.setCountryForPhoneCode(extractedPhoneNo.countryCode)
+//            phoneNumTil.editText!!.setText(extractedPhoneNo.nationalNumber.toString())
+
+        } catch (e: NumberParseException) {
+            Log.e("raghu", " NumberParseException was thrown : " + e.toString());
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == CALL_LOG_REQUEST && resultCode == Activity.RESULT_OK) {
+            handleSelectedCallLogItem(data?.getStringExtra(KEY_PHONE_NUMBER)!!)
+        }
+    }
 }
