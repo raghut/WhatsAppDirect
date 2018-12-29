@@ -15,7 +15,8 @@
 
         <activity
             android:name=".view.activity.WaDirectActivity"
-            android:label="@string/activity_label">
+            android:label="@string/activity_label"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -24,7 +25,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".view.activity.CallLogActivity" />
+        <activity
+            android:name=".view.activity.CallLogActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

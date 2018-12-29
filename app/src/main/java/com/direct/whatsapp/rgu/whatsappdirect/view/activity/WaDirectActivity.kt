@@ -1,13 +1,16 @@
 package com.direct.whatsapp.rgu.whatsappdirect.view.activity
 
+import android.Manifest
 import android.app.Activity
 import android.content.ClipDescription.MIMETYPE_TEXT_PLAIN
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
+import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
@@ -23,6 +26,7 @@ import com.direct.whatsapp.rgu.whatsappdirect.Utils.WHATS_APP_URL
 import com.hbb20.CountryCodePicker
 import io.michaelrocks.libphonenumber.android.NumberParseException
 import java.net.URLEncoder
+
 
 class WaDirectActivity : AppCompatActivity() {
 
@@ -64,16 +68,20 @@ class WaDirectActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.call_history_item -> {
-                val intent = Intent(this, CallLogActivity::class.java)
-                startActivityForResult(intent, CALL_LOG_REQUEST)
+                enableRuntimePermissionToAccessCallLogs();
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
+    private fun lanuchCallLogActivity() {
+        val intent = Intent(this, CallLogActivity::class.java)
+        startActivityForResult(intent, CALL_LOG_REQUEST)
+    }
+
     private fun handleSendButton() {
         if (!TextUtils.isEmpty(phoneNumTil.editText!!.text)) {
-            sendMessage(countryCodePickerView.selectedCountryCode + phoneNumTil.editText!!.text,  messageEt.text.toString())
+            sendMessage(countryCodePickerView.selectedCountryCode + phoneNumTil.editText!!.text, messageEt.text.toString())
         } else {
             phoneNumTil.setError(getString(R.string.phone_no_empty_error))
         }
@@ -148,4 +156,41 @@ class WaDirectActivity : AppCompatActivity() {
             handleSelectedCallLogItem(data?.getStringExtra(KEY_PHONE_NUMBER)!!)
         }
     }
+
+    private fun enableRuntimePermissionToAccessCallLogs() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+            Log.i(TAG, "giving read call log permission")
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.READ_CALL_LOG),
+                    1)
+            Log.i(TAG, "giving read call log permission 2")
+        } else {
+            lanuchCallLogActivity();
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (grantResults.size > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            lanuchCallLogActivity()
+        } else if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.READ_CALL_LOG)) {
+
+        } else {
+            askBlockedPermission()
+        }
+    }
+
+    fun askBlockedPermission() {
+        val alertBuilder = AlertDialog.Builder(this)
+        alertBuilder.setCancelable(true);
+        alertBuilder.setTitle(R.string.app_permission)
+        alertBuilder.setMessage(R.string.ask_call_log_permission_message);
+        alertBuilder.setPositiveButton(R.string.action_settings) { dialog, which -> Utils.openApplicationSettings(this) };
+        alertBuilder.setNegativeButton(R.string.cancel) { dialog, which -> dialog.cancel(); }
+
+        alertBuilder.create().show()
+    }
+
 }

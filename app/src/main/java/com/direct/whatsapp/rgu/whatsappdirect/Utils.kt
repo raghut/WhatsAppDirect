@@ -1,7 +1,10 @@
 package com.direct.whatsapp.rgu.whatsappdirect
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.provider.CallLog
+import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
 import com.direct.whatsapp.rgu.whatsappdirect.data.CallLogData
@@ -85,5 +88,18 @@ object Utils {
 
         val formatter = SimpleDateFormat("dd/MM/yyyy HH:MM")
         return formatter.format(Date(dateInMillis))
+    }
+
+    /**
+     * Opens Application Settings.
+     *
+     * To be used when user has denied or blocked Permission.
+     *
+     * @param context Context
+     */
+    fun openApplicationSettings(context: Context) {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + context.packageName))
+        intent.addCategory(Intent.CATEGORY_DEFAULT)
+        context.startActivity(intent)
     }
 }
