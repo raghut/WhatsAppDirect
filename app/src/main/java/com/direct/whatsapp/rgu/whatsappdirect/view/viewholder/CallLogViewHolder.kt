@@ -20,11 +20,11 @@ class CallLogViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         var resId = 0
         when (dircode) {
-            CallLog.Calls.OUTGOING_TYPE -> resId = R.drawable.vc_call_outgoing
+            CallLog.Calls.OUTGOING_TYPE -> resId = R.drawable.vc_outgoing_call
 
-            CallLog.Calls.INCOMING_TYPE -> resId = R.drawable.vc_call_received
+            CallLog.Calls.INCOMING_TYPE -> resId = R.drawable.vc_income_call
 
-            CallLog.Calls.MISSED_TYPE -> resId = R.drawable.vc_call_missed
+            CallLog.Calls.MISSED_TYPE -> resId = R.drawable.vc_missed_call
         }
 
         itemView.log_type_iv.setImageResource(resId)
