@@ -15,7 +15,6 @@
 
         <activity
             android:name=".view.activity.WaDirectActivity"
-            android:label="@string/activity_label"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

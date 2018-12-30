@@ -42,6 +42,9 @@ class WaDirectActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wa_direct)
+
+        title = getString(R.string.activity_label)
+
         countryCodePickerView = findViewById(R.id.country_code_picker_view)
         phoneNumTil = findViewById(R.id.phone_no_til)
         messageEt = findViewById(R.id.messageEt)
@@ -113,7 +116,7 @@ class WaDirectActivity : AppCompatActivity() {
             val clipText = clipboard.primaryClip.getItemAt(0).text
             if (!TextUtils.isEmpty(clipText) && Utils.isValidPhone(clipText.toString())) {
                 val builder = AlertDialog.Builder(this)
-                builder.setMessage(getString(R.string.clipboard_popup_message) + clipText)
+                builder.setMessage(getString(R.string.clipboard_popup_message) + " " + clipText)
                         .setPositiveButton(getString(R.string.ok)) { dialog, which ->
                             handleClipText(clipText)
                         }
