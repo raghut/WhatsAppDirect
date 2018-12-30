@@ -126,7 +126,7 @@ object Utils {
             i.type = "text/plain"
             i.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.app_name))
             var sAux = "\n" + context.getString(R.string.share_app_desc) + "\n\n"
-            sAux = sAux + "https://play.google.com/store/apps/details?" + context.getPackageName() + "\n\n"
+            sAux = sAux + "https://play.google.com/store/apps/details?id=" + context.getPackageName() + "\n\n"
             i.putExtra(Intent.EXTRA_TEXT, sAux)
             context.startActivity(Intent.createChooser(i, "Choose one"))
         } catch (e: Exception) {
