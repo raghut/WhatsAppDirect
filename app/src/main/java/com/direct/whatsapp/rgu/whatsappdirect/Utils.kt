@@ -1,5 +1,6 @@
 package com.direct.whatsapp.rgu.whatsappdirect
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -101,5 +102,36 @@ object Utils {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + context.packageName))
         intent.addCategory(Intent.CATEGORY_DEFAULT)
         context.startActivity(intent)
+    }
+
+    fun openPlayStorForRating(context: Context) {
+        val uri = Uri.parse("market://details?id=" + context.getPackageName())
+        val goToMarket = Intent(Intent.ACTION_VIEW, uri)
+        // To count with Play market backstack, After pressing back button,
+        // to taken back to our application, we need to add following flags to intent.
+        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or
+                Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+        try {
+            context.startActivity(goToMarket)
+        } catch (e: ActivityNotFoundException) {
+            context.startActivity(Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + context.getPackageName())))
+        }
+    }
+
+    fun shareApp(context: Context) {
+        try {
+            val i = Intent(Intent.ACTION_SEND)
+            i.type = "text/plain"
+            i.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.app_name))
+            var sAux = "\n" + context.getString(R.string.share_app_desc) + "\n\n"
+            sAux = sAux + "https://play.google.com/store/apps/details?" + context.getPackageName() + "\n\n"
+            i.putExtra(Intent.EXTRA_TEXT, sAux)
+            context.startActivity(Intent.createChooser(i, "Choose one"))
+        } catch (e: Exception) {
+            //e.toString();
+        }
+
     }
 }

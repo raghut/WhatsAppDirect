@@ -60,16 +60,19 @@ class WaDirectActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.call_log_menu, menu)
+        menuInflater.inflate(R.menu.main_menu, menu)
 
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.call_history_item -> {
-                enableRuntimePermissionToAccessCallLogs();
-            }
+            R.id.call_history_item -> enableRuntimePermissionToAccessCallLogs()
+
+            R.id.rate_app_item -> Utils.openPlayStorForRating(this)
+
+            R.id.share_app_item -> Utils.shareApp(this)
+
         }
         return super.onOptionsItemSelected(item)
     }
