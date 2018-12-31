@@ -1,5 +1,6 @@
-package com.direct.whatsapp.rgu.whatsappdirect
+package com.direct.whatsapp.rgu.whatsappdirect.view.activity
 
+import android.app.Activity
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -10,6 +11,10 @@ import kotlinx.android.synthetic.main.activity_call_log.*
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import android.support.v7.widget.DividerItemDecoration
+import com.direct.whatsapp.rgu.whatsappdirect.R
+import com.direct.whatsapp.rgu.whatsappdirect.Utils
+import com.direct.whatsapp.rgu.whatsappdirect.Utils.KEY_PHONE_NUMBER
+import com.direct.whatsapp.rgu.whatsappdirect.data.CallLogData
 
 
 class CallLogActivity : AppCompatActivity() {
@@ -19,7 +24,7 @@ class CallLogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_call_log)
 
-        title = "Call Logs"
+        title = getString(R.string.call_log)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
@@ -41,7 +46,7 @@ class CallLogActivity : AppCompatActivity() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    call_log_rv.adapter = CallLogAdapter(it)
+                    call_log_rv.adapter = CallLogAdapter(it, getClickListener())
                 }, { onLoadLogsFailed() })
     }
 
@@ -52,6 +57,16 @@ class CallLogActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun getClickListener(): CallLogAdapter.Listener {
+        return object : CallLogAdapter.Listener {
+            override fun onItemClick(logData: CallLogData) {
+                intent.putExtra(KEY_PHONE_NUMBER, logData.phoneNumber)
+                setResult(Activity.RESULT_OK, intent)
+                finish()
+            }
+        }
     }
 
     fun onLoadLogsFailed() {

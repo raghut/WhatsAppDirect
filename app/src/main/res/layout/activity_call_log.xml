@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    tools:context=".CallLogActivity">
+    tools:context=".view.activity.CallLogActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/call_log_rv"
